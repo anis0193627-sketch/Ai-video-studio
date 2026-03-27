@@ -1,37 +1,27 @@
 import streamlit as st
 import google.generativeai as genai
 
-# ১. আপনার API Key এখানে সেট করা আছে
+# আপনার API Key
 GEMINI_API_KEY = "AIzaSyCso-r5hspZki8AMOSkK-tfqM_Ui2c2gH4"
 genai.configure(api_key=GEMINI_API_KEY)
 
-# ২. নতুন মডেল ব্যবহার (যা এরর দূর করবে)
-model = genai.GenerativeModel('gemini-1.5-flash')
+# মডেল আপডেট করা হয়েছে (gemini-1.5-flash-latest)
+model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
-# ৩. অ্যাপের ডিজাইন
 st.set_page_config(page_title="Poding AI Video Studio", layout="wide")
 st.title("🎬 Poding AI Video Studio")
 
-st.markdown("---")
-
-# ভিডিওর ইনপুট সেকশন
-video_prompt = st.text_area("ভিডিওর গল্পটি লিখুন (যেমন: ফরিদপুরের সবুজ মাঠে ফুটবল খেলা):", placeholder="এখানে আপনার আইডিয়াটি লিখুন...")
+video_prompt = st.text_area("ভিডিওর গল্পটি লিখুন:", placeholder="যেমন: ডাইনোসর গভীর জঙ্গলে হাঁটছে...")
 
 if st.button("🚀 ভিডিও জেনারেট করুন"):
     if video_prompt:
-        with st.spinner("জেমিনী আপনার জন্য প্রম্পট তৈরি করছে..."):
+        with st.spinner("AI কাজ করছে..."):
             try:
-                # এআই থেকে রেসপন্স নেওয়া
-                response = model.generate_content(f"Create a high-quality, detailed AI video animation prompt and camera movement for: {video_prompt}")
-                
-                st.success("আপনার ভিডিওর জন্য এআই প্রম্পট তৈরি হয়েছে!")
-                st.subheader("আপনার প্রম্পটটি নিচে দেওয়া হলো:")
+                # লেটেস্ট মেথড ব্যবহার করে রেসপন্স জেনারেট করা
+                response = model.generate_content(f"Create a high-quality 4K AI video animation prompt for: {video_prompt}")
+                st.success("আপনার ভিডিওর জন্য প্রম্পট তৈরি হয়েছে!")
                 st.write(response.text)
-                
             except Exception as e:
-                st.error(f"দুঃখিত, একটি সমস্যা হয়েছে: {e}")
+                st.error(f"দুঃখিত, আবার এরর আসছে: {str(e)}")
     else:
-        st.warning("দয়া করে আগে ভিডিওর জন্য কিছু লিখুন!")
-
-st.markdown("---")
-st.info("টিপস: এই প্রম্পটটি কপি করে আপনি যেকোনো ভিডিও এআই-তে ব্যবহার করতে পারবেন।")
+        st.warning("আগে কিছু লিখুন!")
